@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public record UserDTO(String firstName,
                       String lastName,
-                      @JsonFormat(pattern="dd-MM-yyyy")
-                      LocalDate birthDay,
+                      String email,
+                      String phoneNumber,
+                      @JsonFormat(pattern="dd-MM-yyyy") LocalDate birthDay,
                       GenderEnum gender) {}

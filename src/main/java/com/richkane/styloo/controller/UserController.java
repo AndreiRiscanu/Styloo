@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController()
+@RequestMapping("/user")
 public class UserController implements IUserController {
 
     UserService userService;
@@ -17,27 +18,27 @@ public class UserController implements IUserController {
         this.userService = userService;
     }
 
-    @PostMapping("/user")
+    @PostMapping
     @Override
     public void addUser(@RequestBody UserDTO user) {
         userService.addUser(user);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/all")
     @Override
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     @Override
     public UserDTO getUser(@PathVariable Long id) {
         return userService.getUser(id);
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping("/{id}")
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 }
