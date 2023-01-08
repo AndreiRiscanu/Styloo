@@ -4,9 +4,14 @@ import com.richkane.styloo.persistence.GenderEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "actor",
+        uniqueConstraints = {
+            @UniqueConstraint(columnNames = "ID"),
+            @UniqueConstraint(columnNames = "EMAIL")
+        })
 public class User {
     @Id
     @GeneratedValue
@@ -18,6 +23,8 @@ public class User {
     private LocalDate birthDay;
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
+    @ManyToMany
+    private Set<Role> roles;
 
     public User() {}
 
@@ -78,5 +85,13 @@ public class User {
 
     public void setGender(GenderEnum gender) {
         this.gender = gender;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
