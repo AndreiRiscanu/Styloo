@@ -25,6 +25,8 @@ public class User {
     private GenderEnum gender;
     @ManyToMany
     private Set<Role> roles;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
 
     public User() {}
 
@@ -93,5 +95,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }
