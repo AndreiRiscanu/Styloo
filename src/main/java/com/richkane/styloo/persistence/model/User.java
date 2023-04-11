@@ -1,10 +1,13 @@
 package com.richkane.styloo.persistence.model;
 
-import com.richkane.styloo.persistence.GenderEnum;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "actor",
@@ -12,49 +15,28 @@ import java.util.Set;
             @UniqueConstraint(columnNames = "ID"),
             @UniqueConstraint(columnNames = "EMAIL")
         })
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Long id;
-    private String firstName;
-    private String lastName;
     private String email;
-    private String phoneNumber;
-    private LocalDate birthDay;
-    @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
+    private String password;
     @ManyToMany
     private Set<Role> roles;
     @OneToOne(cascade = CascadeType.ALL)
-    private Cart cart;
+    private CustomerDetails customerDetails;
 
     public User() {}
 
-    public User(String firstName, String lastName, LocalDate birthDay, GenderEnum gender) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDay = birthDay;
-        this.gender = gender;
+    public User(String email, String password, Set<Role> roles, CustomerDetails customerDetails) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.customerDetails = customerDetails;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -65,28 +47,13 @@ public class User {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDate getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(LocalDate birthDay) {
-        this.birthDay = birthDay;
-    }
-
-    public GenderEnum getGender() {
-        return gender;
-    }
-
-    public void setGender(GenderEnum gender) {
-        this.gender = gender;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Role> getRoles() {
@@ -97,11 +64,43 @@ public class User {
         this.roles = roles;
     }
 
-    public Cart getCart() {
-        return cart;
+    public CustomerDetails getCustomerDetails() {
+        return customerDetails;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCustomerDetails(CustomerDetails customerDetails) {
+        this.customerDetails = customerDetails;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().toString()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

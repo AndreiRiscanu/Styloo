@@ -1,5 +1,6 @@
 package com.richkane.styloo.persistence.model;
 
+import com.richkane.styloo.persistence.RoleEnum;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -15,13 +16,12 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    @ManyToMany( mappedBy = "roles", fetch = FetchType.LAZY )
-    private Set<User> users;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum name;
 
     public Role() {}
 
-    public Role(String name) {
+    public Role(RoleEnum name) {
         this.name = name;
     }
 
@@ -29,19 +29,11 @@ public class Role {
         return id;
     }
 
-    public String getName() {
+    public RoleEnum getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(RoleEnum name) {
         this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 }

@@ -1,4 +1,4 @@
-package com.richkane.styloo.persistence.dto;
+package com.richkane.styloo.persistence.dto.response;
 
 public record ItemDTO(Long id,
                       String name,

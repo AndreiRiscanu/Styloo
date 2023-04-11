@@ -1,6 +1,6 @@
 package com.richkane.styloo.persistence.mapper;
 
-import com.richkane.styloo.persistence.dto.ItemDTO;
+import com.richkane.styloo.persistence.dto.response.ItemDTO;
 import com.richkane.styloo.persistence.model.Item;
 import org.mapstruct.Mapper;
 

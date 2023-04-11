@@ -1,6 +1,6 @@
 package com.richkane.styloo.persistence.mapper;
 
-import com.richkane.styloo.persistence.dto.RoleDTO;
+import com.richkane.styloo.persistence.dto.response.RoleDTO;
 import com.richkane.styloo.persistence.model.Role;
 import org.mapstruct.Mapper;
 

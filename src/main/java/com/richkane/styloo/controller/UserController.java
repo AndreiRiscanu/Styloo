@@ -1,6 +1,6 @@
 package com.richkane.styloo.controller;
 
-import com.richkane.styloo.persistence.dto.UserDTO;
+import com.richkane.styloo.persistence.dto.response.UserDTO;
 import com.richkane.styloo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,12 @@ public class UserController implements IUserController {
     @Override
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        return userService.getUserByEmail(email);
     }
 
     @GetMapping("/{id}")

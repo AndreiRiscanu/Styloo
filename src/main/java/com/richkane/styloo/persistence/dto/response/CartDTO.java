@@ -1,4 +1,4 @@
-package com.richkane.styloo.persistence.dto;
+package com.richkane.styloo.persistence.dto.response;
 
 import java.util.Set;
 
