@@ -1,13 +1,14 @@
 package com.richkane.styloo.service;
 
 import com.richkane.styloo.persistence.RoleEnum;
+import com.richkane.styloo.persistence.dto.response.CartDTO;
 import com.richkane.styloo.persistence.dto.response.UserDTO;
+import com.richkane.styloo.persistence.mapper.CartMapper;
 import com.richkane.styloo.persistence.mapper.UserMapper;
-import com.richkane.styloo.persistence.model.Role;
+import com.richkane.styloo.persistence.model.Cart;
 import com.richkane.styloo.persistence.model.User;
 import com.richkane.styloo.persistence.repository.RoleRepository;
 import com.richkane.styloo.persistence.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.mapstruct.factory.Mappers;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,6 +28,7 @@ public class UserService implements UserDetailsService {
     UserRepository userRepository;
     RoleRepository roleRepository;
     UserMapper userMapper;
+    CartMapper cartMapper;
 
     @Autowired
     public UserService(UserRepository userRepository,
@@ -33,17 +36,7 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userMapper = Mappers.getMapper(UserMapper.class);
-    }
-
-    public void addUser(UserDTO userDTO) {
-        userRepository.findByEmail(userDTO.email()).ifPresent((user) -> {
-            throw new EntityExistsException("There exists an account with the user email " + userDTO.email());
-        });
-        User user = userMapper.userDTOToUser(userDTO);
-        Role role = roleRepository.findByName(RoleEnum.USER).get();
-        user.setRoles(Set.of(role));
-        roleRepository.save(role);
-        userRepository.save(user);
+        this.cartMapper = Mappers.getMapper(CartMapper.class);
     }
 
     public List<UserDTO> getAllUsers() {
@@ -58,8 +51,14 @@ public class UserService implements UserDetailsService {
         return userMapper.userToUserDTO(userRepository.findByEmail(email).get());
     }
 
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    @Transactional
+    public void deleteUserByEmail(String email) {
+        userRepository.deleteByEmail(email);
+    }
+
+    public CartDTO getCartByEmail(String email) {
+        Optional<Cart> cart = userRepository.findCartByEmail(email);
+        return cartMapper.cartToCartDTO(cart.get());
     }
 
     @Transactional

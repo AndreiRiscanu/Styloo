@@ -2,7 +2,6 @@ package com.richkane.styloo.persistence.model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
 
 @Entity
 @Table(name = "item",
@@ -17,8 +16,6 @@ public class Item {
     private Long quantity;
     private Float price;
     private String description;
-    @ManyToMany(mappedBy = "items")
-    private Set<Cart> carts;
 
     public Item() {}
 

@@ -3,6 +3,8 @@ package com.richkane.styloo.service;
 import com.richkane.styloo.persistence.RoleEnum;
 import com.richkane.styloo.persistence.dto.request.AuthenticationRequest;
 import com.richkane.styloo.persistence.dto.response.AuthenticationResponse;
+import com.richkane.styloo.persistence.model.Cart;
+import com.richkane.styloo.persistence.model.CustomerDetails;
 import com.richkane.styloo.persistence.model.Role;
 import com.richkane.styloo.persistence.model.User;
 import com.richkane.styloo.persistence.repository.RoleRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Set;
 
 @Service
@@ -30,7 +33,10 @@ public class AuthenticationService {
         Role role = roleRepository.findByName(RoleEnum.USER).get();
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRoles(Set.of(role));
+        user.getRoles().add(role);
+        CustomerDetails customerDetails = new CustomerDetails();
+        customerDetails.setCart(new Cart(0.0f, Collections.emptySet()));
+        user.setCustomerDetails(customerDetails);
 
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);

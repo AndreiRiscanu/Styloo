@@ -14,15 +14,14 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Float total;
-    @OneToOne
-    private User user;
     @ManyToMany
     private Set<Item> items;
 
     public Cart() {};
 
-    public Cart(User user) {
-        this.user = user;
+    public Cart(Float total, Set<Item> items) {
+        this.total = total;
+        this.items = items;
     }
 
     public Long getId() {
@@ -35,14 +34,6 @@ public class Cart {
 
     public void setTotal(Float total) {
         this.total = total;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Set<Item> getItems() {

@@ -13,7 +13,7 @@ import java.time.LocalDate;
         })
 public class CustomerDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
@@ -22,20 +22,20 @@ public class CustomerDetails {
     private LocalDate birthDay;
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
-    @OneToOne
-    private User user;
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "CART_ID", referencedColumnName = "ID")
     private Cart cart;
 
     public CustomerDetails() {}
 
     public CustomerDetails(String firstName, String lastName, String phoneNumber,
-                           LocalDate birthDay, GenderEnum gender) {
+                           LocalDate birthDay, GenderEnum gender, Cart cart) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.birthDay = birthDay;
         this.gender = gender;
+        this.cart = cart;
     }
 
     public Long getId() {
@@ -88,13 +88,5 @@ public class CustomerDetails {
 
     public void setCart(Cart cart) {
         this.cart = cart;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

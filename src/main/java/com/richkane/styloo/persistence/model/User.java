@@ -6,24 +6,29 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "actor",
+@Table(name = "account",
         uniqueConstraints = {
             @UniqueConstraint(columnNames = "ID"),
             @UniqueConstraint(columnNames = "EMAIL")
         })
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String email;
     private String password;
     @ManyToMany
-    private Set<Role> roles;
+    @JoinTable(name = "account_roles",
+            joinColumns = @JoinColumn(name = "ACCOUNT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    private Set<Role> roles = new HashSet<>();
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "CUSTOMER_DETAILS_ID", referencedColumnName = "ID")
     private CustomerDetails customerDetails;
 
     public User() {}

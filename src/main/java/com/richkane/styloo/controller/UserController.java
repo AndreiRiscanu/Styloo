@@ -1,5 +1,7 @@
 package com.richkane.styloo.controller;
 
+import com.richkane.styloo.persistence.dto.request.AuthenticationRequest;
+import com.richkane.styloo.persistence.dto.response.CartDTO;
 import com.richkane.styloo.persistence.dto.response.UserDTO;
 import com.richkane.styloo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,6 @@ public class UserController implements IUserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    @Override
-    public void addUser(@RequestBody UserDTO user) {
-        userService.addUser(user);
-    }
-
     @GetMapping("/all")
     @Override
     public List<UserDTO> getAllUsers() {
@@ -32,8 +28,8 @@ public class UserController implements IUserController {
 
     @GetMapping
     @Override
-    public UserDTO getUserByEmail(String email) {
-        return userService.getUserByEmail(email);
+    public UserDTO getUserByEmail(@RequestBody AuthenticationRequest request) {
+        return userService.getUserByEmail(request.email());
     }
 
     @GetMapping("/{id}")
@@ -42,9 +38,9 @@ public class UserController implements IUserController {
         return userService.getUser(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{email}")
     @Override
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public void deleteUser(@PathVariable String email) {
+        userService.deleteUserByEmail(email);
     }
 }
