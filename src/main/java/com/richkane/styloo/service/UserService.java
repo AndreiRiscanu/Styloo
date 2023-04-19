@@ -1,8 +1,7 @@
 package com.richkane.styloo.service;
 
-import com.richkane.styloo.persistence.RoleEnum;
-import com.richkane.styloo.persistence.dto.response.CartDTO;
-import com.richkane.styloo.persistence.dto.response.UserDTO;
+import com.richkane.styloo.persistence.dto.response.CartResponse;
+import com.richkane.styloo.persistence.dto.response.UserResponse;
 import com.richkane.styloo.persistence.mapper.CartMapper;
 import com.richkane.styloo.persistence.mapper.UserMapper;
 import com.richkane.styloo.persistence.model.Cart;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -39,15 +37,15 @@ public class UserService implements UserDetailsService {
         this.cartMapper = Mappers.getMapper(CartMapper.class);
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userMapper.usersToUserDTOs(userRepository.findAll());
     }
 
-    public UserDTO getUser(Long id) {
+    public UserResponse getUser(Long id) {
         return userMapper.userToUserDTO(userRepository.findById(id).get());
     }
 
-    public UserDTO getUserByEmail(String email) {
+    public UserResponse getUserByEmail(String email) {
         return userMapper.userToUserDTO(userRepository.findByEmail(email).get());
     }
 
@@ -56,7 +54,7 @@ public class UserService implements UserDetailsService {
         userRepository.deleteByEmail(email);
     }
 
-    public CartDTO getCartByEmail(String email) {
+    public CartResponse getCartByEmail(String email) {
         Optional<Cart> cart = userRepository.findCartByEmail(email);
         return cartMapper.cartToCartDTO(cart.get());
     }

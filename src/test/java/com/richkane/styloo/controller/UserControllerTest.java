@@ -3,10 +3,10 @@ package com.richkane.styloo.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.richkane.styloo.persistence.GenderEnum;
-import com.richkane.styloo.persistence.dto.response.CartDTO;
-import com.richkane.styloo.persistence.dto.response.CustomerDetailsDTO;
-import com.richkane.styloo.persistence.dto.response.RoleDTO;
-import com.richkane.styloo.persistence.dto.response.UserDTO;
+import com.richkane.styloo.persistence.dto.response.CartResponse;
+import com.richkane.styloo.persistence.dto.response.CustomerDetailsResponse;
+import com.richkane.styloo.persistence.dto.response.RoleResponse;
+import com.richkane.styloo.persistence.dto.response.UserResponse;
 import com.richkane.styloo.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +34,17 @@ public class UserControllerTest {
 
     @Test
     public void addUserTest() throws Exception {
-        CustomerDetailsDTO customerDetailsDTO = new CustomerDetailsDTO("firstname", "lastname",
+        CustomerDetailsResponse customerDetailsResponse = new CustomerDetailsResponse("firstname", "lastname",
                 "0712345678", LocalDate.of(1990, 10, 5), GenderEnum.OTHER,
-                new CartDTO(1L, 100.0f, null, null));
+                new CartResponse(1L, 100.0f, null, null));
         mockMvc.perform(MockMvcRequestBuilders.post("/user")
-                .content(asJsonString(new UserDTO("email", Set.of(new RoleDTO(1L, "ADMIN")),
-                        customerDetailsDTO)))
+                .content(asJsonString(new UserResponse("email", Set.of(new RoleResponse(1L, "ADMIN")),
+                        customerDetailsResponse)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-//        ArgumentCaptor<UserDTO> userCaptor = ArgumentCaptor.forClass(UserDTO.class);
+//        ArgumentCaptor<UserResponse> userCaptor = ArgumentCaptor.forClass(UserResponse.class);
 //        Mockito.verify(userService).addUser(userCaptor.capture());
 //        assertEquals(userCaptor.getValue().email(), "email");
 //        assertEquals(userCaptor.getValue().customerDetails().birthDay(), LocalDate.of(1990, 10, 5));

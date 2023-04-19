@@ -1,6 +1,7 @@
 package com.richkane.styloo.persistence.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,11 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false)
+    @Size(min = 8, max = 255)
     private String email;
+    @Column(nullable = false)
+    @Size(min = 8, max = 255)
     private String password;
     @ManyToMany
     @JoinTable(name = "account_roles",
